@@ -29,7 +29,7 @@ abstract class Props
 	{
 		$this->data = $data;
 		$this->processor = new Processor();
-		$this->schema = Expect::structure($this->define())->castTo(ProcessedProps::class);
+		$this->schema = Expect::structure($this->define());
 	}
 
 	/**
@@ -46,9 +46,9 @@ abstract class Props
 	final public function process(?array $data = null): ValidProps
 	{
 		$this->data = $data ?? $this->getData();
-		/** @var ProcessedProps $props */
+		/** @var \stdClass $props */
 		$props = $this->processor->process($this->schema, $this->data);
-		return new ValidProps($this, $props->getValues());
+		return new ValidProps($this, (array) $props);
 	}
 
 	/**
